@@ -1,0 +1,16 @@
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    Propel\Bundle\PropelBundle\Command\:
+        resource: '../../Command'
+        exclude: '../../Command/{AbstractCommand.php,WrappedCommand.php}'
+
+    Propel\Bundle\PropelBundle\Controller\:
+        resource: '../../Controller'
+        tags: ['controller.service_arguments']
+
+    Propel\Bundle\PropelBundle\Controller\PanelController:
+        arguments:
+            $profiler: '@profiler'

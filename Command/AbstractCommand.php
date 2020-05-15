@@ -10,11 +10,11 @@
 
 namespace Propel\Bundle\PropelBundle\Command;
 
-use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 use Symfony\Component\HttpKernel\Bundle\BundleInterface;
@@ -23,7 +23,7 @@ use Symfony\Component\HttpKernel\KernelInterface;
 /**
  * @author Kévin Gomez <contact@kevingomez.fr>
  */
-abstract class AbstractCommand extends ContainerAwareCommand
+abstract class AbstractCommand extends Command
 {
     /**
      * @var string
@@ -45,7 +45,24 @@ abstract class AbstractCommand extends ContainerAwareCommand
      */
     protected $output;
 
+    /**
+     * @var ContainerInterface
+     */
+    protected $container;
+
     use FormattingHelpers;
+
+    public function __construct(ContainerInterface $container)
+    {
+        parent::__construct();
+        $this->container = $container;
+    }
+
+    public function getContainer()
+    {
+        return $this->container;
+    }
+
 
     /**
      * {@inheritdoc}

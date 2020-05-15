@@ -10,6 +10,7 @@
 
 namespace Propel\Bundle\PropelBundle\DependencyInjection;
 
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -43,23 +44,27 @@ class PropelExtension extends Extension
                 $config['generator']['defaultConnection'] = $defaultConnection;
             }
         }
-        
+
         $container->setParameter('propel.logging', $config['runtime']['logging']);
         $container->setParameter('propel.configuration', $config);
 
         // Load services
         if (!$container->hasDefinition('propel')) {
-            $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+            $fileLocator = new FileLocator(__DIR__ . '/../Resources/config');
+
+            $loader = new YamlFileLoader($container, $fileLocator);
+            $loader->load('services.yaml');
+
+            $loader = new XmlFileLoader($container, $fileLocator);
             $loader->load('propel.xml');
             $loader->load('converters.xml');
             $loader->load('security.xml');
-            $loader->load('console.xml');
         }
     }
 
     public function getConfiguration(array $config, ContainerBuilder $container)
     {
-        return new Configuration($container->getParameter('kernel.debug'), $container->getParameter('kernel.root_dir'));
+        return new Configuration($container->getParameter('kernel.debug'), $container->getParameter('kernel.project_dir'));
     }
 
     /**
