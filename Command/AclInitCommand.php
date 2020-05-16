@@ -44,7 +44,7 @@ EOT
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $outputDir = realpath($this->getApplication()->getKernel()->getRootDir().'/../');
+        $outputDir = realpath($this->getApplication()->getKernel()->getProjectDir());
 
         // Generate ACL model
         $modelBuildCmd = new \Propel\Generator\Command\ModelBuildCommand();
