@@ -13,4 +13,4 @@ services:
 
     Propel\Bundle\PropelBundle\Controller\PanelController:
         arguments:
-            $profiler: '@profiler'
+            $profiler: '@?profiler'
